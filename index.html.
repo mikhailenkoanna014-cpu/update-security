@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CRITICAL_SYSTEM_FAILURE</title>
+    <style>
+        body { background-color: black; color: #00ff00; font-family: 'Courier New', monospace; margin: 0; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; -webkit-user-select: none; user-select: none; }
+        #matrix { position: fixed; top: 0; left: 0; width: 100%; height: 100%; font-size: 14px; opacity: 0.3; z-index: 1; word-break: break-all; line-height: 1; }
+        .content { position: relative; z-index: 10; text-align: center; width: 90%; max-width: 600px; }
+        #loading-screen { display: block; }
+        .progress-container { width: 100%; border: 1px solid #00ff00; height: 25px; margin: 20px 0; background: rgba(0,255,0,0.1); }
+        #progress-bar { width: 0%; height: 100%; background: #00ff00; box-shadow: 0 0 15px #00ff00; }
+        #main-alert { display: none; border: 4px solid red; padding: 25px; background: rgba(0, 0, 0, 0.95); box-shadow: 0 0 40px red; }
+        .blink { animation: blinker 0.6s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
+        .danger-btn { background: red; color: white; border: none; padding: 15px; width: 100%; font-weight: 900; cursor: pointer; margin-top: 20px; text-transform: uppercase; font-size: 16px; }
+        #overlay { position: fixed; top:0; left:0; width:100%; height:100%; z-index: 9999; background: black; display: flex; justify-content: center; align-items: center; }
+        .start-btn { padding: 20px 40px; font-size: 18px; background: #00ff00; color: black; border: none; font-weight: bold; cursor: pointer; border-radius: 5px; text-transform: uppercase; }
+    </style>
+</head>
+<body onclick="init()">
+
+    <div id="overlay">
+        <button class="start-btn">ОБНАРУЖЕНО КРИТИЧЕСКОЕ ОБНОВЛЕНИЕ MIUI<br>НАЖМИТЕ ДЛЯ УСТАНОВКИ</button>
+    </div>
+
+    <div id="matrix"></div>
+
+    <div class="content">
+        <div id="loading-screen">
+            <h1 class="blink" style="font-size: 20px;">INITIALIZING SECURITY EXPLOIT...</h1>
+            <div class="progress-container"><div id="progress-bar"></div></div>
+            <div id="scan-details" style="height: 50px; font-size: 14px;">Ожидание разрешений системы...</div>
+        </div>
+
+        <div id="main-alert">
+            <h1 style="color: red; font-size: 24px;" class="blink">SYSTEM COMPROMISED</h1>
+            <div style="color: white; text-align: left; font-size: 13px; line-height: 1.5;">
+                <p>> [STATUS]: Remote Access Trojan (RAT) - <span style="color: #00ff00;">ONLINE</span></p>
+                <p>> [TARGET]: Xiaomi Redmi C11 / Android OS</p>
+                <p>> [GALLERY]: All media files successfully dumped</p>
+                <p>> [TELEGRAM]: Auth session cloned to remote server</p>
+                <p>> [GEODATA]: High precision tracking enabled</p>
+                <hr border="1" color="red">
+                <p style="color: red; font-weight: bold; text-align: center; font-size: 15px;">ВНИМАНИЕ: ВСЕ ДАННЫЕ БУДУТ ОПУБЛИКОВАНЫ ЧЕРЕЗ 24 ЧАСА</p>
+            </div>
+            <button class="danger-btn" onclick="scareMore()">ДЕАКТИВИРОВАТЬ И УДАЛИТЬ RAT</button>
+        </div>
+    </div>
+
+    <audio id="siren" loop>
+        <source src="https://www.soundjay.com/mechanical/sounds/siren-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        let prg = 0;
+        let isStarted = false;
+        const matrix = document.getElementById('matrix');
+        const siren = document.getElementById('siren');
+
+        function init() {
+            if (isStarted) return;
+            isStarted = true;
+            document.getElementById('overlay').style.display = 'none';
+            siren.play();
+            startMatrix();
+            startLoading();
+            if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+        }
+
+        function startMatrix() {
+            setInterval(() => {
+                matrix.innerHTML += Math.random().toString(36).substring(2, 4) + " ";
+                if(matrix.innerHTML.length > 1200) matrix.innerHTML = "";
+            }, 50);
+        }
+
+        function startLoading() {
+            const steps = ["Обход защиты...", "Инъекция кода...", "Доступ к камере...", "Копирование Telegram...", "Финальный дамп..."];
+            const timer = setInterval(() => {
+                prg += 1;
+                document.getElementById('progress-bar').style.width = prg + "%";
+                document.getElementById('scan-details').innerText = steps[Math.floor(prg / 20)] || "Завершение...";
+                if(prg >= 100) {
+                    clearInterval(timer);
+                    document.getElementById('loading-screen').style.display = 'none';
+                    document.getElementById('main-alert').style.display = 'block';
+                    if(navigator.vibrate) navigator.vibrate([1000, 200, 1000]);
+                }
+            }, 100);
+        }
+
+        function scareMore() {
+            // Скачиваем фейковый лог
+            const blob = new Blob(["RAT_STATUS: ACTIVE\nTARGET: REDMI_C11\nDATA_EXPORT: COMPLETED"], {type: 'text/plain'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = "SYSTEM_EXPLOIT_LOG.txt";
+            a.click();
+
+            // Вместо бесконечного цикла — серия алертов через интервал
+            let count = 0;
+            const interval = setInterval(() => {
+                alert("CRITICAL_ERROR: SYSTEM_OVERRIDE");
+                count++;
+                if (count > 10) clearInterval(interval); // Остановится через 10 окон, чтобы телефон не сдох
+            }, 500);
+        }
+    </script>
+</body>
+</html>
