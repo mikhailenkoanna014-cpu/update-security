@@ -3,102 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cutt.ly Worker Dashboard</title>
+    <title>System Dashboard</title>
     <style>
-        body { background-color: #000; color: #0f0; font-family: monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
-        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; display: flex; justify-content: center; align-items: center; z-index: 1000; cursor: pointer; }
-        .start-btn { padding: 20px 40px; font-size: 24px; color: white; background: #007bff; border: none; border-radius: 5px; cursor: pointer; pointer-events: none; }
-        #loader-screen { display: none; text-align: center; width: 80%; }
-        .progress-container { width: 100%; height: 20px; background: #333; border: 1px solid #0f0; margin-top: 20px; position: relative; }
-        #progress-bar { height: 100%; width: 0%; background: #0f0; transition: width 0.1s; }
-        #main-content { display: none; text-align: center; background: #900; color: white; padding: 40px; border: 5px solid red; width: 90%; max-width: 600px; z-index: 2000; position: relative; box-sizing: border-box; }
-        .danger-btn { background: black; color: white; border: 2px solid white; padding: 15px; cursor: pointer; margin-top: 20px; font-weight: bold; width: 100%; text-transform: uppercase; }
-        #sub-log { font-size: 12px; margin-top: 10px; color: #888; height: 20px; }
+        body { background: #000; color: #0f0; font-family: 'Courier New', monospace; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; display: flex; justify-content: center; align-items: center; z-index: 9999; cursor: pointer; }
+        .btn { padding: 25px 50px; font-size: 22px; background: #007bff; color: #fff; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        #loader { display: none; text-align: center; width: 80%; }
+        .bar-bg { width: 100%; height: 30px; background: #222; border: 2px solid #0f0; margin-top: 20px; box-shadow: 0 0 10px #0f0; }
+        #bar-fill { height: 100%; width: 0%; background: #0f0; transition: width 0.1s; }
+        #final { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #800; color: #fff; padding: 40px; text-align: center; box-sizing: border-box; z-index: 10000; border: 10px solid red; }
+        .scare-btn { background: #000; color: #fff; border: 2px solid #fff; padding: 20px; width: 100%; max-width: 400px; margin-top: 30px; font-weight: bold; cursor: pointer; font-size: 18px; }
     </style>
 </head>
 <body>
 
-    <div id="overlay" onclick="startAttack()">
-        <button class="start-btn">BEGIN SECURE SCAN</button>
+    <div id="overlay" onclick="start()">
+        <button class="btn">BEGIN SYSTEM SCAN</button>
     </div>
 
-    <div id="loader-screen">
-        <h1>SYSTEM ANALYSIS IN PROGRESS...</h1>
-        <div id="perc">0% COMPLETED</div>
-        <div class="progress-container">
-            <div id="progress-bar"></div>
-        </div>
-        <div id="sub-log">Initializing...</div>
+    <div id="loader">
+        <h2 id="status" style="letter-spacing: 2px;">SCANNING DIRECTORIES...</h2>
+        <div class="bar-bg"><div id="bar-fill"></div></div>
+        <h1 id="perc">0%</h1>
     </div>
 
-    <div id="main-content">
-        <h1 style="font-size: 40px; margin-bottom: 10px;">Ooops!</h1>
-        <h2 style="margin-bottom: 20px;">Your important files are encrypted!</h2>
-        <p>Many of your documents, photos, videos, databases and other files are no longer accessible because they have been encrypted. Do not waste your time looking for a way to recover them.</p>
-        <p style="color: yellow; font-weight: bold;">To decrypt your files, you need to pay: 0.05 BTC</p>
-        <button class="danger-btn" onclick="scareMore()">ДЕАКТИВИРОВАТЬ RAT</button>
+    <div id="final">
+        <h1 style="font-size: 60px; margin-top: 50px;">Ooops!</h1>
+        <p style="font-size: 24px;">Your personal files are encrypted!</p>
+        <p style="color: #ff0; font-size: 20px; font-weight: bold;">Decryption price: 0.05 BTC</p>
+        <button class="scare-btn" onclick="scare()">ДЕАКТИВИРОВАТЬ СИСТЕМУ</button>
     </div>
 
-    <audio id="siren" loop src="https://www.myinstants.com/media/sounds/nuclear_alarm.mp3"></audio>
+    <audio id="alarm" loop src="https://www.soundjay.com/buttons/beep-01a.mp3"></audio>
 
     <script>
-        let prg = 0;
-        let isStarted = false;
-        const consoleLogs = [
-            "Scanning /data/user/0/com.telegram.messenger...",
-            "Hooking system calls: sys_read, sys_write...",
-            "Privilege escalation: UID 0 achieved.",
-            "Injecting payload into zygote process...",
-            "Dumping SQLite database: contacts.db",
-            "Establishing tunnel to 82.202.160.11:443",
-            "Exfiltrating session tokens... [DONE]"
-        ];
-
-        function startAttack() {
-            if (isStarted) return;
-            isStarted = true;
-
-            // Запуск звука
-            const siren = document.getElementById('siren');
-            if (siren) {
-                siren.volume = 1.0;
-                siren.play().catch(e => console.log("Sound blocked: ", e));
-            }
-
-            // Переключение экранов
+        let p = 0;
+        function start() {
+            const a = document.getElementById('alarm');
+            
+            // На ноуте это принудительно включает аудио-контекст
+            a.muted = false; 
+            a.play().catch(err => console.log("Ошибка звука:", err));
+            
             document.getElementById('overlay').style.display = 'none';
-            document.getElementById('loader-screen').style.display = 'block';
-            
-            slowLoading();
-        }
+            document.getElementById('loader').style.display = 'block';
 
-        function slowLoading() {
-            const bar = document.getElementById('progress-bar');
-            const perc = document.getElementById('perc');
-            const sublog = document.getElementById('sub-log');
-            
-            let interval = setInterval(() => {
-                if (prg >= 100) {
-                    clearInterval(interval);
-                    document.getElementById('loader-screen').style.display = 'none';
-                    document.getElementById('main-content').style.display = 'block';
-                    return;
-                }
-                prg++;
-                if (bar) bar.style.width = prg + '%';
-                if (perc) perc.innerText = prg + '% COMPLETED';
+            let itv = setInterval(() => {
+                p++;
+                document.getElementById('bar-fill').style.width = p + '%';
+                document.getElementById('perc').innerText = p + '%';
                 
-                // Меняем текст логов каждые 15%
-                if (sublog && prg % 15 === 0) {
-                    sublog.innerText = consoleLogs[Math.floor(Math.random() * consoleLogs.length)];
+                if (p >= 100) {
+                    clearInterval(itv);
+                    document.getElementById('loader').style.display = 'none';
+                    document.getElementById('final').style.display = 'block';
                 }
-            }, 60); // Скорость загрузки (можно менять)
+            }, 60); // Скорость нормальная
         }
 
-        function scareMore() {
-            alert("КРИТИЧЕСКАЯ ОШИБКА: Доступ заблокирован. Удаление RAT невозможно без ключа оплаты!");
+        function scare() {
+            alert("КРИТИЧЕСКАЯ ОШИБКА: Доступ заблокирован. Попытка деактивации приведет к удалению всех данных!");
         }
     </script>
-
 </body>
 </html>
