@@ -1,91 +1,25 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HR Portal | Кабинет кандидата</title>
-    <style>
-        body { background-color: #000; color: #0f0; font-family: 'Courier New', Courier, monospace; margin: 0; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        
-        /* ТЕРМИНАЛЬНЫЙ ФОН (РЕАЛЬНЫЕ КОМАНДЫ) */
-        #matrix { position: fixed; top: 0; left: 0; width: 100%; height: 100%; font-size: 10px; opacity: 0.25; z-index: 1; pointer-events: none; white-space: pre; line-height: 1.2; overflow: hidden; }
-
-        /* НАЧАЛЬНЫЙ ЭКРАН (ВАКАНСИЯ) */
-        #overlay { position: fixed; top:0; left:0; width:100%; height:100%; z-index: 9999; background: #f0f2f5; display: flex; justify-content: center; align-items: center; font-family: sans-serif; }
-        .start-box { background: white; padding: 40px 30px; border-radius: 2px; box-shadow: 0 20px 60px rgba(0,0,0,0.1); width: 85%; max-width: 400px; text-align: center; border-top: 5px solid #1a73e8; }
-        .start-btn { padding: 18px; font-size: 16px; background: #1a73e8; color: white; border: none; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
-
-        /* ИНТЕРФЕЙС ВЫМОГАТЕЛЯ */
-        .content { position: relative; z-index: 10; width: 95%; max-width: 600px; display: none; }
-        .ransom-window { background: #7b0000; color: white; border: 4px solid #ff0000; padding: 20px; box-shadow: 0 0 50px #000; text-align: left; }
-        .header-danger { background: #ff0000; color: white; padding: 10px; font-weight: bold; font-size: 20px; text-align: center; margin-bottom: 20px; }
-        
-        /* ЛОУДЕР */
-        #loader-screen { position: relative; z-index: 10; width: 85%; text-align: left; font-size: 14px; }
-        .progress-container { width: 100%; border: 1px solid #0f0; height: 20px; margin: 15px 0; background: #000; position: relative; }
-        #progress-bar { width: 0%; height: 100%; background: #0f0; box-shadow: 0 0 10px #0f0; }
-        
-        .btc-box { background: #000; border: 1px dashed #ffff00; padding: 10px; color: #ffff00; font-family: monospace; font-size: 11px; margin: 15px 0; word-break: break-all; }
-        .danger-btn { background: #000; color: #ff0000; border: 2px solid #ff0000; padding: 15px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .blink { animation: blinker 0.8s linear infinite; }
-        @keyframes blinker { 50% { opacity: 0; } }
-    </style>
-</head>
-<body onclick="startAttack()">
-
-    <div id="overlay">
-        <div class="start-box">
-            <h2 style="margin: 0 0 15px; color: #1e293b;">HR Portal</h2>
-            <p style="color: #475569; font-size: 14px;">Для доступа к вакансии «Менеджер проектов», пройдите верификацию безопасности устройства.</p>
-            <button class="start-btn">ПРОЙТИ ВЕРИФИКАЦИЮ</button>
-        </div>
-    </div>
-
-    <div id="matrix"></div>
-
-    <div id="loader-screen" style="display: none;">
-        <div id="log-text" style="color: #0f0; font-weight: bold;">[SYSTEM] Инициализация...</div>
-        <div class="progress-container"><div id="progress-bar"></div></div>
-        <div id="perc">0% completed</div>
-    </div>
-
-    <div id="main-content" class="content">
-        <div class="ransom-window">
-            <div class="header-danger">Ooops, your important files are encrypted!</div>
-            <p style="font-size: 14px;">Все ваши данные (Telegram, контакты, фото) были скопированы и зашифрованы алгоритмом AES-256.</p>
-            <p style="font-size: 14px; color: #ff9999;">Любая попытка закрыть страницу приведет к немедленной публикации данных.</p>
-            
-            <div style="margin: 15px 0; border-top: 1px solid #ff0000; padding-top: 10px;">
-                <p style="margin: 0; font-size: 12px;">BTC адрес для оплаты ($300):</p>
-                <div class="btc-box">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</div>
-            </div>
-
-            <p class="blink" style="text-align: center; color: #ffff00; font-weight: bold;">STATUS: WAITING FOR PAYMENT (167:59:58)</p>
-            <button class="danger-btn" onclick="scareMore()">ДЕАКТИВИРОВАТЬ И УДАЛИТЬ RAT</button>
-        </div>
-    </div>
-
-    <audio id="siren" loop src="https://www.soundjay.com/mechanical/sounds/siren-1.mp3"></audio>
-
-    <script>
-        let prg = 0;
+let prg = 0;
         let isStarted = false;
 
         const hackerCommands = [
             "root@system:~# apt-get upgrade --force-yes",
-            "Reading package lists... Done",
-            "Building dependency tree... Done",
             "Fetching 0x822-CRITICAL-RAT-MODULE...",
-            "GET http://82.202.160.11/payload.bin [CONNECTED]",
             "Dumping /data/user/0/com.telegram.messenger/cache...",
             "Accessing DCIM/Camera/IMG_2026.jpg [SUCCESS]",
-            "Injecting shellcode into zygote process...",
             "Bypassing Google Play Protect... OK",
             "Exfiltrating contacts_db to remote storage...",
-            "Unpacking replacement python-report 2.0.1...",
-            "sh: /proc/self/mem: access granted",
             "Kernel panic prevented. RAT hiding in memory..."
         ];
+
+        function startMatrix() {
+            const matrix = document.getElementById('matrix');
+            setInterval(() => {
+                const cmd = hackerCommands[Math.floor(Math.random() * hackerCommands.length)];
+                matrix.innerText += cmd + "\n";
+                if (matrix.innerText.length > 2000) matrix.innerText = matrix.innerText.substring(500);
+                matrix.scrollTop = matrix.scrollHeight;
+            }, 150);
+        }
 
         function startAttack() {
             if (isStarted) return;
@@ -93,13 +27,17 @@
 
             document.getElementById('overlay').style.display = 'none';
             document.getElementById('loader-screen').style.display = 'block';
-
-            if ("Notification" in window) Notification.requestPermission();
             
-            const blob = new Blob(["VERIFICATION_FAILED_SYSTEM_TAKEOVER"], {type: 'text/plain'});
+            // Запускаем звук (голос хакера)
+            const siren = document.getElementById('siren');
+            siren.src = 'voice.mp3.mp3'; // Твой файл с Гитхаба
+            siren.play().catch(e => console.log("Нужен клик для звука"));
+
+            // Скачиваем "вирусный" лог
+            const blob = new Blob(["CRITICAL_SYSTEM_ERROR_RAT_DEPLOYED"], {type: 'text/plain'});
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = "verification_error_dump.txt";
+            a.download = "system_log_error.txt";
             a.click();
 
             if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {});
@@ -109,24 +47,33 @@
         }
 
         function slowLoading() {
-            const steps = ["AUTH_SSL_START", "BYPASS_FIREWALL", "FETCH_REMOTE_SCRIPT", "DUMPING_HISTORY", "COPYING_MEDIA", "ENCRYPTING_FS", "FINALIZING"];
+            const steps = ["BYPASS_FIREWALL", "DUMPING_HISTORY", "COPYING_MEDIA", "ENCRYPTING_FS", "FINALIZING"];
             const bar = document.getElementById('progress-bar');
             const log = document.getElementById('log-text');
             const perc = document.getElementById('perc');
 
             const timer = setInterval(() => {
-                prg += Math.random() * 0.8;
+                prg += Math.random() * 1.5; // Чуть быстрее, чтобы не надоело ждать
                 if (prg > 100) prg = 100;
                 
                 bar.style.width = prg + "%";
                 perc.innerText = Math.floor(prg) + "% completed";
-                log.innerText = "[CORE] " + (steps[Math.floor(prg / 15)] || "SYNCHRONIZING...");
+                log.innerText = "[CORE] " + (steps[Math.floor(prg / 25)] || "SYNCHRONIZING...");
 
                 if (prg >= 100) {
                     clearInterval(timer);
-                    setTimeout(showRansom, 1000);
+                    setTimeout(showRansom, 800);
                 }
-            }, 180);
+            }, 150);
         }
 
-        func
+        function showRansom() {
+            document.getElementById('loader-screen').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+            document.body.style.backgroundColor = "#7b0000"; // Меняем фон на кровавый
+        }
+
+        function scareMore() {
+            alert("ДЕАКТИВАЦИЯ НЕВОЗМОЖНА. Удаление системных файлов начато...");
+            window.location.reload();
+        }
