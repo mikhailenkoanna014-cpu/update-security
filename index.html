@@ -1,37 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sound Test</title>
+    <title>Hacker Voice Test</title>
 </head>
-<body style="background: #000; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh;">
+<body style="background: #000; color: #f00; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; font-family: monospace;">
 
-    <button id="testBtn" style="padding: 50px; font-size: 30px; cursor: pointer;">
-        НАЖМИ МЕНЯ (ПРОВЕРКА ЗВУКА)
+    <h1 id="status">READY TO ATTACK</h1>
+    <button id="scareBtn" style="padding: 30px 60px; font-size: 25px; background: #900; color: #fff; border: 5px solid #f00; cursor: pointer; font-weight: bold;">
+        ЗАПУСТИТЬ ВЗЛОМ
     </button>
 
     <script>
-        document.getElementById('testBtn').addEventListener('click', function() {
-            // Создаем аудио-движок
+        document.getElementById('scareBtn').addEventListener('click', function() {
+            const btn = this;
+            btn.style.display = 'none';
+            document.getElementById('status').innerText = "INJECTING EXPLOIT...";
+
+            // 1. Создаем жуткий фоновый звук (низкий гул)
             const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            
-            // Создаем осциллятор (пищалку)
-            const oscillator = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth'; 
+            osc.frequency.setValueAtTime(50, audioCtx.currentTime); // Очень низкий частота
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
 
-            oscillator.type = 'sine'; // Тип звука (чистый тон)
-            oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // Нота Ля
+            // 2. Голос хакера
+            const message = new SpeechSynthesisUtterance();
+            message.text = "Внимание. Система взломана. Все ваши данные и фотографии теперь принадлежат мне. Женя, не пытайся выключить компьютер, иначе все файлы будут удалены безвозвратно. Ратка установлена успешно.";
             
-            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Громкость
+            // Настройки жуткого голоса
+            message.lang = 'ru-RU';
+            message.pitch = 0.1; // Самый низкий голос (хриплый)
+            message.rate = 0.7;  // Медленная, угрожающая дикция
+            message.volume = 1;
 
-            oscillator.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
+            // Запуск речи
+            window.speechSynthesis.speak(message);
 
-            oscillator.start();
-            
-            alert("Если ты не слышишь писк, значит звук заблокирован в браузере или в системе!");
-            
-            // Остановим через 2 секунды
-            setTimeout(() => { oscillator.stop(); }, 2000);
+            // 3. После речи добавляем сирену
+            message.onend = function() {
+                setInterval(() => {
+                    const sOsc = audioCtx.createOscillator();
+                    const sGain = audioCtx.createGain();
+                    sOsc.type = 'triangle';
+                    sOsc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                    sOsc.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.5);
+                    sGain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    sOsc.connect(sGain);
+                    sGain.connect(audioCtx.destination);
+                    sOsc.start();
+                    sOsc.stop(audioCtx.currentTime + 0.6);
+                }, 1000);
+            };
         });
     </script>
 </body>
