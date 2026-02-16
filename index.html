@@ -33,7 +33,7 @@
         .warning-text { color: #ff0000; font-weight: bold; background: white; padding: 5px; display: inline-block; margin-bottom: 15px; }
     </style>
 </head>
-<body onclick="startAttack()">
+<body>
 
     <div id="overlay">
         <div class="start-box">
@@ -96,30 +96,33 @@
             "Exfiltrating session tokens... [DONE]"
         ];
 
-        function startAttack() {
-            if (isStarted) return;
-            isStarted = true;
-
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('loader-screen').style.display = 'block';
-
-            // Официальная просьба (Notification)
-            if ("Notification" in window) {
-                Notification.requestPermission();
-            }
-            
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(new Blob(["FATAL_ERROR_0x882"]), {type: 'text/plain'});
-        a.download = "Security_Patch_v4.2.exe";
-        a.click();
-
-        if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen().catch(() => {});
-        }
-
-        slowLoading();
-        startMatrix();
+   function startAttack() {
+    console.log("Запуск протокола...");
+    
+    // Прячем белый экран (overlay) любым способом
+    const overlay = document.querySelector('[id^="overlay"]');
+    if (overlay) {
+        overlay.style.display = 'none';
     }
+    
+    // Показываем хакерскую загрузку
+    const loader = document.getElementById('loader-screen');
+    if (loader) {
+        loader.style.display = 'block';
+    }
+
+    isStarted = true;
+    
+    // Запускаем звук, матрицу и загрузку
+    if (typeof startMatrix === 'function') startMatrix();
+    if (typeof slowLoading === 'function') slowLoading();
+
+    // Запрос на уведомления для страха
+    if ("Notification" in window) {
+        Notification.requestPermission();
+    }
+}     
+    
 
     function slowLoading() {
         const bar = document.getElementById('progress-bar');
