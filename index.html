@@ -78,112 +78,66 @@
 
     <audio id="siren" loop src="https://www.soundjay.com/mechanical/sounds/siren-1.mp3"></audio>
 
-    <script>
-        let prg = 0;
-        let isStarted = false;
+<script>
+let prg = 0;
+let isStarted = false;
 
-        const consoleLogs = [
-            "Scanning /data/user/0/com.telegram.messenger...",
-            "Hooking system calls: sys_read, sys_write...",
-            "Privilege escalation: UID 0 achieved.",
-            "Injecting payload into zygote process...",
-            "Dumping SQLite database: contacts.db",
-            "Accessing /DCIM/Camera/... 4.2GB identified.",
-            "Establishing tunnel to 82.202.160.11:443",
-            "Bypassing Play Protect integrity check...",
-            "RAT payload 0x882 deployed in memory-only mode.",
-            "Encrypting local buffer: RSA-2048 key generated.",
-            "Exfiltrating session tokens... [DONE]"
-        ];
-
-   function startAttack() {
-    console.log("Запуск протокола...");
-    
-    // Прячем белый экран (overlay) любым способом
-   document.body.innerHTML = ''; // Это просто очистит весь экран под ноль 
-    if (overlay) {
-        overlay.style.display = 'none';
-    }
-    
-    // Показываем хакерскую загрузку
-    const loader = document.getElementById('loader-screen');
-    if (loader) {
-        loader.style.display = 'block';
-    }
-
+function startAttack() {
+    console.log("Погнали!");
+    if (isStarted) return;
     isStarted = true;
+
+    // Скрываем белый экран
+    const overlay = document.getElementById('overlay');
+    if (overlay) overlay.style.display = 'none';
     
-    // Запускаем звук, матрицу и загрузку
+    // Показываем лоадер
+    const loader = document.getElementById('loader-screen');
+    if (loader) loader.style.display = 'block';
+
+    // Запускаем функции (они должны быть описаны ниже)
     if (typeof startMatrix === 'function') startMatrix();
     if (typeof slowLoading === 'function') slowLoading();
-
-    // Запрос на уведомления для страха
-    if ("Notification" in window) {
-        Notification.requestPermission();
-    }
-}     
     
-
-    function slowLoading() {
-        const bar = document.getElementById('progress-bar');
-        const perc = document.getElementById('perc');
-        const subLog = document.getElementById('sub-log');
-
-        const timer = setInterval(() => {
-            prg += Math.random() * 0.4;
-            if (prg > 100) prg = 100;
-            
-            bar.style.width = prg + "%";
-            perc.innerText = Math.floor(prg) + "% ANALYZING SYSTEM";
-
-            if (Math.random() > 0.8) {
-                subLog.innerHTML = "> " + consoleLogs[Math.floor(Math.random() * consoleLogs.length)] + "<br>" + subLog.innerHTML;
-            }
-
-            if (prg >= 100) {
-                clearInterval(timer);
-                setTimeout(showRansom, 1000);
-            }
-        }, 100); 
-    }
-
-    function showRansom() {
-        document.getElementById('loader-screen').style.display = 'none';
-        document.getElementById('main-content').style.display = 'block';
-        document.body.style.backgroundColor = "#2a0000";
-
-        const audio = document.getElementById('siren');
-        audio.volume = 1.0;
-        audio.play().catch(() => {
-            console.log("Ждем взаимодействия для звука");
-        });
-
-        if(navigator.vibrate) navigator.vibrate([1000, 500, 1000]);
-        window.onbeforeunload = function() { return "Data loss imminent!"; };
-    }
-function scareMore() {
-    const audio = document.getElementById('siren');
-    audio.volume = 1.0;
-    audio.play(); 
-
-    // Взрываем вибромотор Андроида
-    if (navigator.vibrate) {
-        navigator.vibrate([500, 200, 500, 200, 500, 200, 1000, 500, 1000]);
-    }
-
-    alert("КРИТИЧЕСКАЯ ОШИБКА: Обнаружена попытка обхода защиты. Система Android переведена в режим блокировки.");
-
-    // Бешеный спам вкладками для лагов
-    let spammer = setInterval(() => {
-        window.open(window.location.href, '_blank');
-        if (navigator.vibrate) navigator.vibrate(200);
-    }, 40); // 40 мс — это очень быстро
-
-    // Через 1.5 секунды вешаем телефон алертом
-    setTimeout(() => {
-        while(true) {
-            alert("FATAL ERROR: System Partition Corrupted. Please contact support.");
-        }
-    }, 1500);
+    // Звук сирены (если есть тег audio с id="siren")
+    const siren = document.getElementById('siren');
+    if (siren) siren.play().catch(() => console.log("Звук заблокирован"));
 }
+
+const consoleLogs = [
+    "Scanning /data/user/0/com.telegram.messenger...",
+    "Hooking system calls: sys_read, sys_write...",
+    "Privilege escalation: UID 0 achieved.",
+    "Injecting payload into zygote process...",
+    "Dumping SQLite database: contacts.db",
+    "Establishing tunnel to 82.202.160.11:443",
+    "Exfiltrating session tokens... [DONE]"
+];
+
+// Эти функции должны остаться в коде ниже, не удаляй их!
+function slowLoading() {
+    const bar = document.getElementById('progress-bar');
+    const perc = document.getElementById('perc');
+    const sublog = document.getElementById('sub-log');
     
+    let interval = setInterval(() => {
+        if (prg >= 100) {
+            clearInterval(interval);
+            // Тут можно добавить появление финального окна
+            const mainContent = document.getElementById('main-content');
+            if (mainContent) mainContent.style.display = 'block';
+            return;
+        }
+        prg++;
+        if (bar) bar.style.width = prg + '%';
+        if (perc) perc.innerText = prg + '% COMPLETED';
+        if (sublog) sublog.innerText = consoleLogs[Math.floor(Math.random() * consoleLogs.length)];
+    }, 100);
+}
+
+// Если у тебя есть функция startMatrix, она должна быть тут
+function startMatrix() {
+    console.log("Матрица запущена");
+    // Тут твой старый код для канваса матрицы
+}
+</script>
