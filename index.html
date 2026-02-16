@@ -100,7 +100,7 @@
     console.log("Запуск протокола...");
     
     // Прячем белый экран (overlay) любым способом
-    const overlay = document.querySelector('[id^="overlay"]');
+   document.body.innerHTML = ''; // Это просто очистит весь экран под ноль 
     if (overlay) {
         overlay.style.display = 'none';
     }
