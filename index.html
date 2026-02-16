@@ -6,7 +6,7 @@
 </head>
 <body style="background: #000; height: 100vh; display: flex; justify-content: center; align-items: center; margin: 0;">
 
-    <audio id="player" src="voice.mp3"></audio>
+    <audio id="player" src="voice.mp3.mp3"></audio>
 
     <button id="btn" style="padding: 40px; font-size: 24px; background: #b00; color: #fff; border: 2px solid #fff; cursor: pointer; font-family: monospace; font-weight: bold;">
         ЗАПУСТИТЬ ТЕСТ ГОЛОСА
@@ -23,7 +23,9 @@
                     btn.innerText = "ИГРАЕТ!";
                 })
                 .catch(error => {
-                    alert("Ошибка: " + error.message + "\nПроверь настройки звука в браузере!");
+                    // Если всё равно не пойдет, выведем точную причину
+                    console.error(error);
+                    alert("Ошибка: " + error.message);
                 });
         });
     </script>
