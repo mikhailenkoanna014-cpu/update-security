@@ -9,7 +9,7 @@
     <audio id="player" src="voice.mp3"></audio>
 
     <button id="btn" style="padding: 40px; font-size: 24px; background: #b00; color: #fff; border: 2px solid #fff; cursor: pointer; font-family: monospace; font-weight: bold;">
-        ПРОВЕРИТЬ ГОЛОС ХАКЕРА
+        ЗАПУСТИТЬ ТЕСТ ГОЛОСА
     </button>
 
     <script>
@@ -17,18 +17,15 @@
             const audio = document.getElementById('player');
             const btn = document.getElementById('btn');
 
-            // Пробуем запустить
             audio.play()
                 .then(() => {
-                    btn.style.background = "#0b0"; // Зеленая кнопка если все ок
-                    btn.innerText = "ВОСПРОИЗВЕДЕНИЕ...";
+                    btn.style.background = "#0b0";
+                    btn.innerText = "ИГРАЕТ!";
                 })
                 .catch(error => {
-                    alert("ТИШИНА! Ошибка: " + error.message + "\n\nПроверь: \n1. Загрузил ли ты файл voice.mp3 на GitHub?\n2. Точно ли он называется маленькими буквами?");
-                    btn.style.background = "#555";
+                    alert("Ошибка: " + error.message + "\nПроверь настройки звука в браузере!");
                 });
         });
     </script>
-
 </body>
 </html>
